@@ -12,7 +12,7 @@ export default function ListaEspera() {
       setLoading(true)
       setError(null)
 
-      const res = await api.get('/lista-espera')
+      const res = await api.get('/solicitudes')
 
       // BFF devuelve ApiResponseDTO
       const data = res.data?.data ?? res.data
