@@ -4,7 +4,7 @@ export default function Navbar() {
   const links = [
     { id: 'dashboard', nombre: 'Dashboard', path: '/' },
     { id: 'pacientes', nombre: 'Pacientes', path: '/pacientes' },
-    { id: 'lista-espera', nombre: 'Lista Espera', path: '/lista-espera' },
+    { id: 'lista-espera', nombre: 'Lista Espera', path: '/solicitudes' },
     { id: 'reasignacion', nombre: 'Reasignación', path: '/reasignacion' },
     { id: 'citas', nombre: 'Citas', path: '/citas' },
   ]
