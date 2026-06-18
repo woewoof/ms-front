@@ -7,7 +7,7 @@ const links = [
   { to: '/',            label: 'Dashboard' },
   { to: '/pacientes',   label: 'Pacientes' },
   { to: '/citas',       label: 'Citas' },
-  { to: '/lista-espera',label: 'Lista de Espera' },
+  { to: '/solicitudes',label: 'Lista de Espera' },
   { to: '/reasignacion',label: 'Reasignación' },
 ]
 
