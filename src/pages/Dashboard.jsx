@@ -11,7 +11,7 @@ export default function Dashboard() {
       setLoading(true)
 
       const [l, r] = await Promise.all([
-        api.get('/lista-espera'),
+        api.get('/solicitudes'),
         api.get('/reasignaciones')
       ])
 
