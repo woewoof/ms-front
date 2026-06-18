@@ -56,8 +56,8 @@ export default function Pacientes() {
               <th>ID</th>
               <th>Nombre</th>
               <th>RUT</th>
-              <th>Email</th>
-              <th>Teléfono</th>
+              <th>Contacto</th>
+              <th>Historial</th>
             </tr>
           </thead>
 
@@ -67,8 +67,8 @@ export default function Pacientes() {
                 <td className="p-3">#{p.id}</td>
                 <td>{p.nombre}</td>
                 <td>{p.rut}</td>
-                <td>{p.email}</td>
-                <td>{p.telefono}</td>
+                <td>{p.contacto}</td>
+                <td>{p.historial}</td>
               </tr>
             ))}
           </tbody>

@@ -14,6 +14,7 @@ export default function ListaEspera() {
       setLoading(true)
       setError(null)
 
+
       // BFF
       const res = await api.get('/solicitudes')
 
@@ -117,11 +118,14 @@ export default function ListaEspera() {
             <thead className="bg-gray-50">
 
               <tr>
-                <th className="p-3 text-left">ID</th>
-                <th className="text-left">Paciente ID</th>
-                <th className="text-left">Tipo</th>
-                <th className="text-left">Prioridad</th>
-                <th className="text-left">Estado</th>
+                <th className="p-3">Pos</th>
+                <th>Paciente</th>
+                <th>Tipo</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Días</th>
+                <th>Acción</th>
               </tr>
 
             </thead>
@@ -130,16 +134,9 @@ export default function ListaEspera() {
 
               {solicitudes.map((s) => (
 
-                <tr
-                  key={s.id}
-                  className="border-t hover:bg-gray-50"
-                >
-
                   <td className="p-3">{s.id}</td>
-
-                  <td>{s.pacienteId ?? '—'}</td>
-
-                  <td>{s.tipo ?? '—'}</td>
+                  <td>Paciente #{s.pacienteId}</td>
+                  <td>{s.tipo}</td>
 
                   <td>
 
@@ -154,6 +151,15 @@ export default function ListaEspera() {
                     <span className={`px-2 py-1 rounded text-xs ${colorEstado(s.estado)}`}>
                       {s.estado}
                     </span>
+                  </td>
+
+                  <td>
+                    {s.creadoEn
+                      ? new Date(s.creadoEn).toLocaleDateString('es-CL')
+                      : '—'}
+                  </td>
+
+                  <td>{s.diasEsperaEstimados ?? '—'}</td>
 
                   </td>
 

@@ -42,7 +42,9 @@ export default function Reasignacion() {
       setMensaje(null)
 
       await api.post('/reasignaciones', {
-        tipo: 'AUTOMATICA'
+        citaId: 1,
+        pacienteCanceladorId: 1,
+        motivoCancelacion: 'Imprevisto del paciente'
       })
 
       setMensaje('✔ Reasignación ejecutada correctamente')
