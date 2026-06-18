@@ -133,7 +133,7 @@ export default function ListaEspera() {
             <tbody>
 
               {solicitudes.map((s) => (
-
+                <tr>
                   <td className="p-3">{s.id}</td>
                   <td>Paciente #{s.pacienteId}</td>
                   <td>{s.tipo}</td>
