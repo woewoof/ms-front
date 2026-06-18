@@ -124,7 +124,7 @@ export default function ListaEspera() {
               <tr>
                 <th className="p-3">Pos</th>
                 <th>Paciente</th>
-                <th>Especialidad</th>
+                <th>Tipo</th>
                 <th>Prioridad</th>
                 <th>Estado</th>
                 <th>Fecha</th>
@@ -137,9 +137,9 @@ export default function ListaEspera() {
               {solicitudes.map((s) => (
                 <tr key={s.id} className="border-t hover:bg-gray-50">
 
-                  <td className="p-3">{s.posicion}</td>
-                  <td>{s.paciente?.nombre ?? '—'}</td>
-                  <td>{s.especialidad}</td>
+                  <td className="p-3">{s.id}</td>
+                  <td>Paciente #{s.pacienteId}</td>
+                  <td>{s.tipo}</td>
 
                   <td>
                     <span className={`px-2 py-1 rounded text-xs ${colorPrioridad(s.prioridad)}`}>
@@ -154,8 +154,8 @@ export default function ListaEspera() {
                   </td>
 
                   <td>
-                    {s.fechaInscripcion
-                      ? new Date(s.fechaInscripcion).toLocaleDateString('es-CL')
+                    {s.creadoEn
+                      ? new Date(s.creadoEn).toLocaleDateString('es-CL')
                       : '—'}
                   </td>
 
