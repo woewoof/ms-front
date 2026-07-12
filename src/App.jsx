@@ -10,6 +10,7 @@ import Pacientes from './pages/Pacientes'
 import Citas from './pages/Citas'
 import Agendar from './pages/Agendar'
 import MisCitas from './pages/MisCitas'
+import MiAgenda from './pages/MiAgenda'
 
 // Exige sesion y, si se indican roles, que el usuario tenga el rol correcto
 function Privada({ children, roles }) {
@@ -37,6 +38,9 @@ export default function App() {
         {/* Paciente */}
         <Route path="/mis-citas" element={<Privada roles={['PACIENTE']}><MisCitas /></Privada>} />
         <Route path="/agendar" element={<Privada roles={['PACIENTE']}><Agendar /></Privada>} />
+
+        {/* Medico */}
+        <Route path="/mi-agenda" element={<Privada roles={['MEDICO']}><MiAgenda /></Privada>} />
 
         {/* Admin */}
         <Route path="/" element={<Privada roles={['ADMIN']}><Dashboard /></Privada>} />

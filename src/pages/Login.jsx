@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/api'
-import { guardarUsuario } from '../auth/auth'
 import { guardarUsuario, rutaPorRol } from '../auth/auth'
 
 export default function Login() {

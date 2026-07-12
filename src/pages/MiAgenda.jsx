@@ -2,63 +2,41 @@ import { useEffect, useState } from 'react'
 import api from '../api/api'
 import { obtenerUsuario } from '../auth/auth'
 
-export default function MisCitas() {
+export default function MiAgenda() {
   const usuario = obtenerUsuario()
   const [citas, setCitas] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [mensaje, setMensaje] = useState(null)
 
   const cargar = async () => {
     try {
       setLoading(true)
       setError(null)
-      const res = await api.get(`/citas/paciente/${usuario.pacienteId}`)
+      const res = await api.get('/citas/medico', {
+        params: { nombreMedico: usuario.nombre }
+      })
       const body = res.data?.data ?? res.data
       setCitas(Array.isArray(body) ? body : [])
     } catch (err) {
-      setError('No se pudieron cargar tus citas')
+      setError('No se pudo cargar tu agenda')
     } finally {
       setLoading(false)
     }
   }
 
-  const cancelar = async (citaId) => {
-    if (!window.confirm('¿Seguro que quieres cancelar esta cita?')) return
-    try {
-      setMensaje(null)
-      setError(null)
-      const res = await api.post(`/reasignaciones/procesar/${citaId}`, null, {
-        params: { motivo: 'Cancelada por el paciente' }
-      })
-      const body = res.data
-      if (body.success) {
-        setMensaje(body.data?.mensaje ?? 'Cita cancelada')
-      } else {
-        setError(body.message || 'No se pudo cancelar la cita')
-      }
-      await cargar()
-    } catch (err) {
-      setError('No se pudo procesar la cancelación')
-    }
-  }
-
   useEffect(() => { cargar() }, [])
-
-  const cancelable = (estado) => estado === 'PROGRAMADA' || estado === 'CONFIRMADA'
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold text-blue-800 mb-6">Mis Citas</h1>
+      <h1 className="text-2xl font-bold text-blue-800 mb-6">Mi Agenda</h1>
 
-      {mensaje && <p className="text-green-600 mb-2">{mensaje}</p>}
       {error && <p className="text-red-500 mb-2">{error}</p>}
 
       <div className="bg-white rounded-xl shadow">
         {loading && <p className="p-4">Cargando...</p>}
 
         {!loading && citas.length === 0 && (
-          <p className="p-4 text-gray-500">No tienes citas agendadas.</p>
+          <p className="p-4 text-gray-500">No tienes citas asignadas.</p>
         )}
 
         {!loading && citas.length > 0 && (
@@ -67,10 +45,9 @@ export default function MisCitas() {
               <tr>
                 <th className="text-left p-3">Fecha</th>
                 <th className="text-left">Hora</th>
+                <th className="text-left">Paciente</th>
                 <th className="text-left">Especialidad</th>
-                <th className="text-left">Médico</th>
                 <th className="text-left">Estado</th>
-                <th className="text-left">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -78,22 +55,12 @@ export default function MisCitas() {
                 <tr key={c.id} className="border-t hover:bg-gray-50">
                   <td className="p-3">{c.fecha}</td>
                   <td>{c.hora}</td>
+                  <td>#{c.pacienteId}</td>
                   <td>{c.especialidad}</td>
-                  <td>{c.nombreMedico}</td>
                   <td>
                     <span className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-800">
                       {c.estado}
                     </span>
-                  </td>
-                  <td>
-                    {cancelable(c.estado) && (
-                      <button
-                        onClick={() => cancelar(c.id)}
-                        className="text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                      >
-                        Cancelar
-                      </button>
-                    )}
                   </td>
                 </tr>
               ))}
