@@ -160,9 +160,6 @@ export default function ListaEspera() {
                   </td>
 
                   <td>{s.diasEsperaEstimados ?? '—'}</td>
-
-                  </td>
-
                 </tr>
 
               ))}

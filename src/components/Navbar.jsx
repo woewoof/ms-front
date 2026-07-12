@@ -1,19 +1,27 @@
 // Navbar principal del sistema RedNorte
-// Contiene el logo y los enlaces de navegación
+// Contiene el logo, los enlaces de navegación y la sesión del usuario
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { obtenerUsuario, cerrarSesion } from '../auth/auth'
 
 const links = [
   { to: '/',            label: 'Dashboard' },
   { to: '/pacientes',   label: 'Pacientes' },
   { to: '/citas',       label: 'Citas' },
-  { to: '/solicitudes',label: 'Lista de Espera' },
+  { to: '/solicitudes', label: 'Lista de Espera' },
   { to: '/reasignacion',label: 'Reasignación' },
 ]
 
 export default function Navbar() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const usuario = obtenerUsuario()
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const salir = () => {
+    cerrarSesion()
+    navigate('/login')
+  }
 
   return (
     <nav className="bg-blue-800 text-white shadow-lg">
@@ -27,8 +35,8 @@ export default function Navbar() {
           <span className="text-xl font-bold tracking-wide">RedNorte</span>
         </div>
 
-        {/* Links escritorio */}
-        <div className="hidden md:flex gap-6">
+        {/* Zona derecha escritorio */}
+        <div className="hidden md:flex items-center gap-6">
           {links.map(link => (
             <Link
               key={link.to}
@@ -42,6 +50,18 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+
+          {usuario && (
+            <div className="flex items-center gap-3 pl-4 border-l border-blue-600">
+              <span className="text-sm text-blue-100">Hola, {usuario.nombre}</span>
+              <button
+                onClick={salir}
+                className="text-sm bg-blue-600 px-3 py-1 rounded hover:bg-blue-500"
+              >
+                Salir
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Botón menú móvil */}
@@ -66,6 +86,15 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+
+          {usuario && (
+            <button
+              onClick={salir}
+              className="text-left text-white text-sm bg-blue-700 px-3 py-2 rounded"
+            >
+              Salir ({usuario.nombre})
+            </button>
+          )}
         </div>
       )}
     </nav>
