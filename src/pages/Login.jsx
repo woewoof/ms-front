@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/api'
 import { guardarUsuario } from '../auth/auth'
+import { guardarUsuario, rutaPorRol } from '../auth/auth'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -21,7 +22,7 @@ export default function Login() {
 
       if (body.success) {
         guardarUsuario(body.data)
-        navigate('/')
+        navigate(rutaPorRol(body.data.rol))
       } else {
         setError(body.message || 'No se pudo iniciar sesion')
       }

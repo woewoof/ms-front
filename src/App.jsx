@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import { estaLogueado } from './auth/auth'
+import { obtenerUsuario, rutaPorRol } from './auth/auth'
 
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -8,11 +8,17 @@ import ListaEspera from './pages/ListaEspera'
 import Reasignacion from './pages/Reasignacion'
 import Pacientes from './pages/Pacientes'
 import Citas from './pages/Citas'
+import Agendar from './pages/Agendar'
+import MisCitas from './pages/MisCitas'
 
-// Envuelve las paginas privadas: exige sesion y muestra el Navbar
-function Privada({ children }) {
-  if (!estaLogueado()) {
+// Exige sesion y, si se indican roles, que el usuario tenga el rol correcto
+function Privada({ children, roles }) {
+  const usuario = obtenerUsuario()
+  if (!usuario) {
     return <Navigate to="/login" replace />
+  }
+  if (roles && !roles.includes(usuario.rol)) {
+    return <Navigate to={rutaPorRol(usuario.rol)} replace />
   }
   return (
     <>
@@ -28,12 +34,17 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
 
-        <Route path="/" element={<Privada><Dashboard /></Privada>} />
-        <Route path="/lista-espera" element={<Privada><ListaEspera /></Privada>} />
-        <Route path="/solicitudes" element={<Privada><ListaEspera /></Privada>} />
-        <Route path="/reasignacion" element={<Privada><Reasignacion /></Privada>} />
-        <Route path="/pacientes" element={<Privada><Pacientes /></Privada>} />
-        <Route path="/citas" element={<Privada><Citas /></Privada>} />
+        {/* Paciente */}
+        <Route path="/mis-citas" element={<Privada roles={['PACIENTE']}><MisCitas /></Privada>} />
+        <Route path="/agendar" element={<Privada roles={['PACIENTE']}><Agendar /></Privada>} />
+
+        {/* Admin */}
+        <Route path="/" element={<Privada roles={['ADMIN']}><Dashboard /></Privada>} />
+        <Route path="/pacientes" element={<Privada roles={['ADMIN']}><Pacientes /></Privada>} />
+        <Route path="/citas" element={<Privada roles={['ADMIN']}><Citas /></Privada>} />
+        <Route path="/solicitudes" element={<Privada roles={['ADMIN']}><ListaEspera /></Privada>} />
+        <Route path="/lista-espera" element={<Privada roles={['ADMIN']}><ListaEspera /></Privada>} />
+        <Route path="/reasignacion" element={<Privada roles={['ADMIN']}><Reasignacion /></Privada>} />
       </Routes>
     </BrowserRouter>
   )

@@ -18,3 +18,9 @@ export function cerrarSesion() {
 export function estaLogueado() {
   return obtenerUsuario() !== null
 }
+
+export function rutaPorRol(rol) {
+  if (rol === 'PACIENTE') return '/mis-citas'
+  if (rol === 'MEDICO') return '/mi-agenda'
+  return '/'
+}

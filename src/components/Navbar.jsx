@@ -1,22 +1,33 @@
 // Navbar principal del sistema RedNorte
-// Contiene el logo, los enlaces de navegación y la sesión del usuario
+// Muestra los enlaces segun el rol del usuario y la sesion
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { obtenerUsuario, cerrarSesion } from '../auth/auth'
 
-const links = [
-  { to: '/',            label: 'Dashboard' },
-  { to: '/pacientes',   label: 'Pacientes' },
-  { to: '/citas',       label: 'Citas' },
-  { to: '/solicitudes', label: 'Lista de Espera' },
-  { to: '/reasignacion',label: 'Reasignación' },
-]
+const linksPorRol = {
+  ADMIN: [
+    { to: '/',            label: 'Dashboard' },
+    { to: '/pacientes',   label: 'Pacientes' },
+    { to: '/citas',       label: 'Citas' },
+    { to: '/solicitudes', label: 'Lista de Espera' },
+    { to: '/reasignacion',label: 'Reasignación' },
+  ],
+  MEDICO: [
+    { to: '/mi-agenda', label: 'Mi Agenda' },
+  ],
+  PACIENTE: [
+    { to: '/mis-citas', label: 'Mis Citas' },
+    { to: '/agendar',   label: 'Agendar' },
+  ],
+}
 
 export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const usuario = obtenerUsuario()
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const links = linksPorRol[usuario?.rol] ?? []
 
   const salir = () => {
     cerrarSesion()
