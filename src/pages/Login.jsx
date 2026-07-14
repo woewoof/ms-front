@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import api from '../api/api'
 import { guardarUsuario, rutaPorRol } from '../auth/auth'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -69,6 +69,10 @@ export default function Login() {
         >
           {cargando ? 'Entrando...' : 'Entrar'}
         </button>
+
+        <p className="text-sm text-gray-600 mt-4 text-center">
+          ¿No tienes cuenta? <Link to="/registro" className="text-blue-700">Crear cuenta</Link>
+        </p>
       </form>
     </div>
   )

@@ -3,6 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import api from '../api/api'
 import { obtenerUsuario } from '../auth/auth'
 
+const MEDICOS = [
+  { nombre: 'Dra. Rojas',   especialidad: 'Cardiología' },
+  { nombre: 'Dr. Fuentes',  especialidad: 'Traumatología' },
+  { nombre: 'Dra. Salinas', especialidad: 'Pediatría' },
+  { nombre: 'Dr. Herrera',  especialidad: 'Medicina General' },
+]
+
+const ESPECIALIDADES = [...new Set(MEDICOS.map(m => m.especialidad))]
+
 export default function Agendar() {
   const usuario = obtenerUsuario()
   const navigate = useNavigate()
@@ -17,23 +26,23 @@ export default function Agendar() {
   const [error, setError] = useState(null)
   const [enviando, setEnviando] = useState(false)
 
+  const medicosFiltrados = MEDICOS.filter(m => m.especialidad === especialidad)
+
+  const cambiarEspecialidad = (e) => {
+    setEspecialidad(e.target.value)
+    setNombreMedico('')
+  }
+
   const enviar = async (e) => {
     e.preventDefault()
     setError(null)
     setEnviando(true)
-
     try {
       const res = await api.post('/citas', {
         pacienteId: usuario.pacienteId,
-        fecha,
-        hora,
-        especialidad,
-        nombreMedico,
-        centroSalud,
-        motivo
+        fecha, hora, especialidad, nombreMedico, centroSalud, motivo
       })
       const body = res.data
-
       if (body.success) {
         navigate('/mis-citas')
       } else {
@@ -65,13 +74,25 @@ export default function Agendar() {
         </div>
         <div>
           <label className="block text-sm text-gray-600 mb-1">Especialidad</label>
-          <input type="text" value={especialidad} onChange={e => setEspecialidad(e.target.value)}
-            className="w-full border rounded px-3 py-2" required />
+          <select value={especialidad} onChange={cambiarEspecialidad}
+            className="w-full border rounded px-3 py-2" required>
+            <option value="">Selecciona una especialidad</option>
+            {ESPECIALIDADES.map(esp => (
+              <option key={esp} value={esp}>{esp}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm text-gray-600 mb-1">Médico</label>
-          <input type="text" value={nombreMedico} onChange={e => setNombreMedico(e.target.value)}
-            className="w-full border rounded px-3 py-2" required />
+          <select value={nombreMedico} onChange={e => setNombreMedico(e.target.value)}
+            className="w-full border rounded px-3 py-2" required disabled={!especialidad}>
+            <option value="">
+              {especialidad ? 'Selecciona un médico' : 'Primero elige especialidad'}
+            </option>
+            {medicosFiltrados.map(m => (
+              <option key={m.nombre} value={m.nombre}>{m.nombre}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm text-gray-600 mb-1">Centro de salud</label>

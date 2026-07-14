@@ -11,6 +11,7 @@ import Citas from './pages/Citas'
 import Agendar from './pages/Agendar'
 import MisCitas from './pages/MisCitas'
 import MiAgenda from './pages/MiAgenda'
+import Registro from './pages/Registro'
 
 // Exige sesion y, si se indican roles, que el usuario tenga el rol correcto
 function Privada({ children, roles }) {
@@ -34,6 +35,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
 
         {/* Paciente */}
         <Route path="/mis-citas" element={<Privada roles={['PACIENTE']}><MisCitas /></Privada>} />

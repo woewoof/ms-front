@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react'
 import api from '../api/api'
 
+const colorEstado = (estado) => {
+  switch (estado) {
+    case 'CANCELADA':  return 'bg-red-100 text-red-700'
+    case 'PROGRAMADA': return 'bg-blue-100 text-blue-800'
+    case 'CONFIRMADA': return 'bg-green-100 text-green-800'
+    case 'COMPLETADA': return 'bg-gray-200 text-gray-700'
+    default:           return 'bg-gray-100 text-gray-600'
+  }
+}
+
 export default function Citas() {
   const [citas, setCitas] = useState([])
   const [loading, setLoading] = useState(true)
@@ -10,10 +20,8 @@ export default function Citas() {
     try {
       setLoading(true)
       setError(null)
-
       const res = await api.get('/citas')
       const data = res.data?.data ?? res.data
-
       setCitas(Array.isArray(data) ? data : [])
     } catch (err) {
       setError('Error conectando con BFF')
@@ -23,9 +31,7 @@ export default function Citas() {
     }
   }
 
-  useEffect(() => {
-    cargar()
-  }, [])
+  useEffect(() => { cargar() }, [])
 
   return (
     <div className="p-6">
@@ -56,7 +62,11 @@ export default function Citas() {
                 <td>{c.hora}</td>
                 <td>{c.nombreMedico}</td>
                 <td>{c.especialidad}</td>
-                <td>{c.estado}</td>
+                <td>
+                  <span className={`px-2 py-1 rounded text-xs ${colorEstado(c.estado)}`}>
+                    {c.estado}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
